@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Xuxx,Galileo,blog" />
+    <meta name="generator" content="Maverick 1.0" />
+    <meta name="template" content="Galileo" />
+    <link rel="alternate" type="application/rss+xml" title="Xuxx - 个人博客 &raquo; RSS 2.0" href="/Xuxx_Blogs/feed/index.xml" />
+    <link rel="alternate" type="application/atom+xml" title="Xuxx - 个人博客 &raquo; ATOM 1.0" href="/Xuxx_Blogs/feed/atom/index.xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/galileo-ec40839efa.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/ExSearch/ExSearch-182e5a8868.css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
+    <script>
+        var ExSearchConfig = {
+            root: "",
+            api: "https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/b8cbb18a9b00fe9d86204cec5358ae05.json"
+        }
+    </script>
+    
+<title>配置多个GitHub账号的SSH密钥管理 - Xuxx - 个人博客</title>
+<meta name="author" content="Xuxx" />
+<meta name="description" content="如何配置多个GitHub账号的SSH密钥，实现不同项目使用不同账号进行Git操作" />
+<meta property="og:title" content="配置多个GitHub账号的SSH密钥管理 - Xuxx - 个人博客" />
+<meta property="og:description" content="如何配置多个GitHub账号的SSH密钥，实现不同项目使用不同账号进行Git操作" />
+<meta property="og:site_name" content="Xuxx - 个人博客" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/Xuxx_Blogs/archives/rc002/" />
+<meta property="og:image" content="" />
+<meta property="article:published_time" content="2025-01-10T15:30:00-00.00" />
+<meta name="twitter:title" content="配置多个GitHub账号的SSH密钥管理 - Xuxx - 个人博客" />
+<meta name="twitter:description" content="如何配置多个GitHub账号的SSH密钥，实现不同项目使用不同账号进行Git操作" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="" />
+
+
+    
+<meta http-equiv="x-dns-prefetch-control" content="on">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <header id="ga-header">
+                <div first>
+                    <aside id="ga-logo">
+                        <a href="/Xuxx_Blogs/" target="_self">
+                            <img src="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/logo.png" alt="Xuxx - 个人博客">
+                        </a>
+                    </aside>
+                    <aside id="ga-brand">
+                        <h1 class="brand"><a class="no-style" href="/Xuxx_Blogs/">Xuxx - 个人博客</a></h1>
+                        <p>坚持有效行动，改变自然发生。</p>
+                    </aside>
+                </div>
+                <div second id="ga-nav">
+                    <nav class="navs">
+                        <ul><li><a class="ga-highlight" href="/Xuxx_Blogs/" target="_self">首页</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/Xuxx_Blogs/archives/" target="_self">归档</a></li><span class="separator">·</span><li><a class="ga-highlight" href="/Xuxx_Blogs/about/" target="_self">关于</a></li><span class="separator">·</span><li><a href="#" target="_self" class="search-form-input ga-highlight">搜索</a></li></ul>
+                    </nav>
+                    <nav class="social-links">
+                        <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/xuxx3309" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/QQ1820582487" target="_blank"><i class="gi gi-github"></i>GitHub</a></li></ul>
+                    </nav>
+                </div>
+            </header>
+            <div class="wrapper">
+                
+<main>    
+    <section class="ga-section ga-content">
+        <article class="yue">
+            <h1 class="ga-post_title">配置多个GitHub账号的SSH密钥管理</h1>
+            <span class="ga-post_meta ga-mono">
+                <span>Xuxx</span>
+                <time>
+                    2025-01-10
+                </time>
+                
+                in <a no-style class="category" href="/Xuxx_Blogs/category/日常/">
+                    日常
+                </a>
+                
+                
+            </span>
+            <div class="ga-content_body">
+                <h2>背景</h2>
+<p>当你需要同时使用多个GitHub账号（如个人账号和工作账号）时，需要配置不同的SSH密钥来区分身份。本教程将详细介绍如何配置多个GitHub账号的SSH密钥管理。</p>
+<h2>1. 生成SSH密钥对</h2>
+<p>为每个GitHub账号生成独立的SSH密钥对：</p>
+<div class="highlight"><pre><span></span><span class="c1"># 生成个人账号的SSH密钥</span>
+ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519_github_personal<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;your-personal-email@example.com&quot;</span>
+
+<span class="c1"># 生成工作账号的SSH密钥</span>
+ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519_github_work<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;your-work-email@example.com&quot;</span>
+</pre></div>
+<h2>2. 配置SSH Config文件</h2>
+<p>创建或编辑 <code>~/.ssh/config</code> 文件：</p>
+<div class="highlight"><pre><span></span><span class="c1"># 个人GitHub账号</span>
+Host<span class="w"> </span>github.com-personal
+<span class="w">    </span>HostName<span class="w"> </span>github.com
+<span class="w">    </span>User<span class="w"> </span>git
+<span class="w">    </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519_github_personal
+<span class="w">    </span>PreferredAuthentications<span class="w"> </span>publickey
+<span class="w">    </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># 工作GitHub账号</span>
+Host<span class="w"> </span>github.com-work
+<span class="w">    </span>HostName<span class="w"> </span>github.com
+<span class="w">    </span>User<span class="w"> </span>git
+<span class="w">    </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519_github_work
+<span class="w">    </span>PreferredAuthentications<span class="w"> </span>publickey
+<span class="w">    </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># 默认GitHub配置（可选）</span>
+Host<span class="w"> </span>github.com
+<span class="w">    </span>HostName<span class="w"> </span>github.com
+<span class="w">    </span>User<span class="w"> </span>git
+<span class="w">    </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519_github_personal
+<span class="w">    </span>PreferredAuthentications<span class="w"> </span>publickey
+<span class="w">    </span>IdentitiesOnly<span class="w"> </span>yes
+</pre></div>
+<p>设置文件权限：</p>
+<div class="highlight"><pre><span></span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/config
+</pre></div>
+<h2>3. 添加SSH公钥到GitHub</h2>
+<p>获取公钥内容：</p>
+<div class="highlight"><pre><span></span><span class="c1"># 个人账号公钥</span>
+cat<span class="w"> </span>~/.ssh/id_ed25519_github_personal.pub
+
+<span class="c1"># 工作账号公钥</span>
+cat<span class="w"> </span>~/.ssh/id_ed25519_github_work.pub
+</pre></div>
+<p>将对应的公钥分别添加到对应的GitHub账号：</p>
+<ol>
+<li>登录GitHub → Settings → SSH and GPG keys → New SSH key</li>
+<li>粘贴公钥内容并保存</li>
+</ol>
+<h2>4. 测试SSH连接</h2>
+<div class="highlight"><pre><span></span><span class="c1"># 测试个人账号连接</span>
+ssh<span class="w"> </span>-T<span class="w"> </span>github.com-personal
+
+<span class="c1"># 测试工作账号连接</span>
+ssh<span class="w"> </span>-T<span class="w"> </span>github.com-work
+</pre></div>
+<p>成功时会显示：<code>Hi [username]! You've successfully authenticated, but GitHub does not provide shell access.</code></p>
+<h2>5. 使用不同的SSH配置</h2>
+<h3>克隆仓库时</h3>
+<div class="highlight"><pre><span></span><span class="c1"># 个人项目</span>
+git<span class="w"> </span>clone<span class="w"> </span>git@github.com-personal:username/repo.git
+
+<span class="c1"># 工作项目</span>
+git<span class="w"> </span>clone<span class="w"> </span>git@github.com-work:username/repo.git
+</pre></div>
+<h3>修改现有项目的remote URL</h3>
+<div class="highlight"><pre><span></span><span class="c1"># 修改为个人配置</span>
+git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com-personal:username/repo.git
+
+<span class="c1"># 修改为工作配置</span>
+git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com-work:username/repo.git
+</pre></div>
+<h2>6. 批量配置脚本</h2>
+<p>创建脚本自动配置多个项目：</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># 根据组织名称自动配置SSH密钥</span>
+<span class="nv">projects</span><span class="o">=(</span>
+<span class="w">    </span><span class="s2">&quot;project1&quot;</span>
+<span class="w">    </span><span class="s2">&quot;project2&quot;</span>
+<span class="w">    </span><span class="s2">&quot;project3&quot;</span>
+<span class="o">)</span>
+
+<span class="k">for</span><span class="w"> </span>project<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">projects</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nv">project_path</span><span class="o">=</span><span class="s2">&quot;/path/to/projects/</span><span class="nv">$project</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$project_path</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$project_path</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nv">remotes</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>remote<span class="k">)</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span>remote<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nv">$remotes</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">            </span><span class="nv">current_url</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>remote<span class="w"> </span>get-url<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$remote</span><span class="s2">&quot;</span><span class="k">)</span>
+
+<span class="w">            </span><span class="c1"># 根据仓库URL判断使用哪个配置</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$current_url</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span>*<span class="s2">&quot;work-org&quot;</span>*<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                </span><span class="nv">new_url</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$current_url</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s|git@github.com:|git@github.com-work:|&#39;</span><span class="k">)</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">                </span><span class="nv">new_url</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$current_url</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s|git@github.com:|git@github.com-personal:|&#39;</span><span class="k">)</span>
+<span class="w">            </span><span class="k">fi</span>
+
+<span class="w">            </span>git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$remote</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$new_url</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">done</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="k">done</span>
+</pre></div>
+<h2>可选配置：使用443端口</h2>
+<h3>什么时候需要443端口？</h3>
+<p>在某些网络环境中（如公司网络），标准的SSH端口（22）可能被防火墙阻止。GitHub提供了通过443端口进行SSH连接的选项。</p>
+<h3>配置443端口SSH</h3>
+<p>修改 <code>~/.ssh/config</code> 文件：</p>
+<div class="highlight"><pre><span></span><span class="c1"># 个人GitHub账号（使用443端口）</span>
+Host<span class="w"> </span>github.com-personal
+<span class="w">    </span>HostName<span class="w"> </span>ssh.github.com
+<span class="w">    </span>Port<span class="w"> </span><span class="m">443</span>
+<span class="w">    </span>User<span class="w"> </span>git
+<span class="w">    </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519_github_personal
+<span class="w">    </span>PreferredAuthentications<span class="w"> </span>publickey
+<span class="w">    </span>IdentitiesOnly<span class="w"> </span>yes
+
+<span class="c1"># 工作GitHub账号（使用443端口）</span>
+Host<span class="w"> </span>github.com-work
+<span class="w">    </span>HostName<span class="w"> </span>ssh.github.com
+<span class="w">    </span>Port<span class="w"> </span><span class="m">443</span>
+<span class="w">    </span>User<span class="w"> </span>git
+<span class="w">    </span>IdentityFile<span class="w"> </span>~/.ssh/id_ed25519_github_work
+<span class="w">    </span>PreferredAuthentications<span class="w"> </span>publickey
+<span class="w">    </span>IdentitiesOnly<span class="w"> </span>yes
+</pre></div>
+<h3>添加SSH主机密钥到known_hosts</h3>
+<p><strong>为什么需要修改known_hosts？</strong></p>
+<p>当你改变SSH连接的主机名（从 <code>github.com</code> 到 <code>ssh.github.com</code>）或端口时，SSH客户端会遇到新的主机密钥。为了安全验证，需要将GitHub的SSH主机密钥添加到 <code>~/.ssh/known_hosts</code> 文件中。</p>
+<div class="highlight"><pre><span></span><span class="c1"># 添加GitHub的SSH主机密钥（443端口）</span>
+ssh-keyscan<span class="w"> </span>-t<span class="w"> </span>rsa<span class="w"> </span>-p<span class="w"> </span><span class="m">443</span><span class="w"> </span>ssh.github.com<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/known_hosts
+</pre></div>
+<p>这个命令的作用：</p>
+<ul>
+<li><code>ssh-keyscan</code>：扫描SSH主机密钥</li>
+<li><code>-t rsa</code>：指定密钥类型为RSA</li>
+<li><code>-p 443</code>：指定端口为443</li>
+<li><code>ssh.github.com</code>：GitHub的SSH服务器地址</li>
+<li><code>&gt;&gt; ~/.ssh/known_hosts</code>：将密钥追加到known_hosts文件</li>
+</ul>
+<h3>测试443端口连接</h3>
+<div class="highlight"><pre><span></span>ssh<span class="w"> </span>-T<span class="w"> </span>github.com-work
+</pre></div>
+<h2>故障排除</h2>
+<h3>1. 权限被拒绝</h3>
+<div class="highlight"><pre><span></span><span class="c1"># 检查SSH代理中的密钥</span>
+ssh-add<span class="w"> </span>-l
+
+<span class="c1"># 如果没有密钥，添加到SSH代理</span>
+ssh-add<span class="w"> </span>~/.ssh/id_ed25519_github_personal
+ssh-add<span class="w"> </span>~/.ssh/id_ed25519_github_work
+</pre></div>
+<h3>2. 连接超时或被拒绝</h3>
+<ul>
+<li>检查网络连接</li>
+<li>尝试使用HTTPS代替SSH</li>
+<li>使用443端口配置</li>
+</ul>
+<h3>3. 仓库不存在错误</h3>
+<ul>
+<li>确认仓库URL正确</li>
+<li>检查GitHub账号权限</li>
+<li>验证SSH密钥是否正确添加到对应账号</li>
+</ul>
+<h2>总结</h2>
+<p>通过合理配置SSH密钥和config文件，可以优雅地管理多个GitHub账号，实现不同项目使用不同身份进行Git操作。记住定期检查和更新SSH密钥，确保账号安全。</p>
+
+            </div>
+        </article>
+        <div id="ga-tags">
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/Xuxx_Blogs/tag/Git/">#Git</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/Xuxx_Blogs/tag/SSH/">#SSH</a>
+    </span>
+    
+    <span class="ga-tag">
+        <a class="ga-highlight" href="/Xuxx_Blogs/tag/GitHub/">#GitHub</a>
+    </span>
+    
+</div>
+    </section>
+
+    
+<section id="ga-content_pager">
+
+    <div class="next">
+        <h3>没有了</h3>
+        <p class="yue">这是最新的文章</p>
+    </div>
+
+
+    <div class="prev">
+        <a class="ga-highlight" href="/Xuxx_Blogs/archives/go_bj_001/">GoFrame 笔记</a>
+        <p class="yue">笔记</p>
+    </div>
+
+</section>
+
+
+    
+
+</main>
+
+                <footer class="ga-mono" id="ga-footer">
+                    <section>
+                        <span id="ga-uptime"></span>
+                        <span class="brand">Xuxx - 个人博客</span>
+                    </section>
+                    <section>
+                        <p class="copyright">
+                            <span>Copyright © 2025 Xuxx</span>
+                            <span>Powered by <a no-style href="https://github.com/AlanDecode/Maverick" target="_blank">Maverick & Galileo</a></span>
+                        </p>
+                        <div class="copyright">
+                            <span class="footer-addon">
+                                
+                            </span>
+                            <nav class="social-links">
+                                <ul><li><a class="no-style" title="Twitter" href="https://twitter.com/xuxx3309" target="_blank"><i class="gi gi-twitter"></i>Twitter</a></li><span class="separator">·</span><li><a class="no-style" title="GitHub" href="https://github.com/QQ1820582487" target="_blank"><i class="gi gi-github"></i>GitHub</a></li></ul>
+                            </nav>
+                        </div>
+                    </section>
+                    <script>
+                        var site_build_date = "2019-12-26T02:30+08:00"
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/galileo-d8a0a06eff.js"></script>
+                </footer>
+            </div>
+        </div>
+    </div>
+        
+        
+        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                          <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div> 
+                </div>
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/ExSearch/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/ExSearch/ExSearch-493cb9cd89.js"></script>
+    
+    <!--katex-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/katex.min.js"></script>
+    <script>
+    mathOpts = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/qq1820582487/Xuxx_Blogs@gh-pages/assets/auto-render.min.js" onload="renderMathInElement(document.body, mathOpts);"></script>
+
+    
+    </body>
+</html>

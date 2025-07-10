@@ -1,0 +1,27 @@
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Node.js files
+node_modules/
+npm-debug.log*
+
+# Build files
+dist/
+build/
